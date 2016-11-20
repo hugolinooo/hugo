@@ -23,13 +23,47 @@ body {
 Quais melhorias podemos realizar para aumentar sua satisafação?<br>
 Estamos ansiosos para ouvir sua opinião!</p>
 
-<h3>Entre com sua sugestão:</h3>
-<form action="welcome.php" method="post">
-E-mail: <input type="email" name="Email"><br>
-Sugestão: <input type="text" name="Sugestao"><br>
-<input type="submit">
+<?php
 
-</form>
+ function insereSugestao($nome, $email, $descricao)
+   {
+      // conectando ao BD
+      include "conecta.php";
+
+      // executando a operação de SQL
+      $resultado = mysqli_query($conexao, "INSERT INTO sugestao(nome, email, descricao) VALUES ('".$nome."','".$email."','".$descricao."')") or die("Não foi possível executar a SQL: ".mysqli_error($conexao));
+
+      if ($resultado === TRUE){
+            echo "<br/>Os dados foram carregados com sucesso!";
+      } else {
+            echo "<br/>Erro no cadastro!";
+      }
+      // fechamento da conexão   
+      mysqli_close($conexao);
+   }
+
+
+if(isset($_POST['enviar'])) {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $descricao = $_POST['descricao'];
+    
+    insereSugestao($nome, $email, $descricao);
+}
+else{
+    echo '<form action="enviar_sugestao.php" method="POST"><p>
+<fieldset>
+    <legend>Entre com sua sugestão:</legend>
+<p><label for="nome">Nome: </label><input type="text" name="nome" size="40"></p>
+<p><label for="email">E-mail: </label><input type="email" name="email" size="39"></p>
+<p><label for="descricao">Sugestão: </label></p>
+<textarea name="descricao" rows="8" cols="50" placeholder="Escreva sua sugestão aqui.">
+</textarea>
+<p><input type="submit" name="enviar" value="Enviar"></p>
+</fieldset>
+</form>';
+}
+?>
 
 </font>
 </body>
