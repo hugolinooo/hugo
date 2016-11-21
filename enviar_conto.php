@@ -31,7 +31,7 @@ Além disso, contaremos algumas curiosidades relacionadas às histórias e conto
       include "conecta.php";
 
       // executando a operação de SQL
-      $resultado = mysqli_query($conexao, "INSERT INTO contos(usuario, titulo, texto) VALUES ('".$usuario."','".$titulo."','".$texto."')") or die("Não foi possível executar a SQL: ".mysqli_error($conexao));
+      $resultado = mysqli_query($conexao, "INSERT INTO contos(usuario, titulo, texto) VALUES ((select usuarioid from usuario where login ='".$usuario."')','".$titulo."','".$texto."')") or die("Não foi possível executar a SQL: ".mysqli_error($conexao));
 
       if ($resultado === TRUE){
             echo "<br/>O conto foi cadastrado com sucesso!";
@@ -43,31 +43,23 @@ Além disso, contaremos algumas curiosidades relacionadas às histórias e conto
    }
 
 if(isset($_POST['enviar'])){
-    if (isset($_SESSION['usuario'])){
-        
-        $titulo = $_POST['titulo'];
+        $usuario = $_SESSION['usuario'];
+        $titulo= $_POST['titulo'];
         $texto = $_POST['texto'];
-        $usuario = $_SESSION["login"];
-    
+        
+        
+        
         insereConto($usuario, $titulo, $texto);
     
-        echo "Dados enviados com sucesso!";
-    }
-    else{
-        echo "Faça login para ter direito a carregar contos!";
-    }
 }
 else{
 
-    echo '<form action="enviar_conto.php" enctype="multipart/form-data" method="post"><p>
+    echo '<form action="enviar_conto.php" method="POST">
     <fieldset>
         <legend>Dados do Conto:</legend>
         <p><label for="titulo">Título: </label><input type="text" name="titulo" size="40"></p>
-        <p><label for="conto">Conto: </label></p>
-        <textarea name="conto" rows="8" cols="50" placeholder="Escreva seu conto aqui.">
-        </textarea>
-        <p><label for="foto">Imagem: </label><input type="file" name="imagem" id="imagem" size = "41" /></p>
-        <input type="hidden" name="MAX_SIZE_FILE" value="100000">
+        <p><label for="texto">Conto: </label></p>
+        <textarea name="texto" rows="8" cols="50" placeholder="Escreva seu conto aqui."></textarea>
         <p><input type="submit" name="enviar" value="Enviar"></p>
     </fieldset>
     </form>';

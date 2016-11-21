@@ -32,6 +32,40 @@ Um menino verde encontrou um ninho de papoula com duas cobrinhas de casaca-de-co
 <br>
 Já este colega narrou a história desta outra maneira:<br>
 Uma cobra de casaca-de-couro viu um passarinho num pé de papoula que queria matar um menino verde, mas este saiu do ninho e comeu a cobra.<br>
+
+
+<h1>Contos Enviados</h1>
+    <div align="center">
+        <br><table>
+            <?php
+            
+            
+            include "conecta.php";
+
+	        $query=	"SELECT * from contos where aprovacao = 1";
+
+	        $resultado = mysqli_query($conexao,$query) or die ("Não consigo executar a query: ". mysqli_error());
+
+            if($resultado) {
+                while ($row = mysqli_fetch_array($resultado)){
+                echo "<tr><td><h2>Título: ". $row['titulo']. "<h2><br>".$row['texto']."</td></tr>";
+                }
+            }
+            
+            echo "</tr></table>";
+            	mysqli_close($conexao);
+            ?>
+    </div>
+
+
+
+
+
+
+
+
+
+
 </font>
 </body>
 </html>

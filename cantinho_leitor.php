@@ -18,30 +18,37 @@ body {
 
 <?php  include"menu.inc"; ?>
 
+
+
 <h1>Cantinho do Leitor</h1>
     <div align="center">
         <table>
         <tr>
-            <td>
-                <img src="/imgs/leitor01.jpg" title="André Augusto">
-                <br>André Augusto<br>
-            </td>
-            <td>
-                <img src="/imgs/leitor02.jpg" title="Bruno Silva">
-                <br>Bruno Silva<br>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img src="/imgs/leitor03.jpg" title="Marília Santos">
-                <br>Marília Santos<br>
-            </td>
-            <td>
-                <img src="/imgs/leitor04.jpg" title="Sandra Oliveira">
-                <br>Sandra Oliveira<br>
-            </td>
-        </tr>
-        </table>
+            <?php $leitores=0; 
+            
+            
+            include "conecta.php";
+
+	        $query=	"SELECT * from mural where aprovacao = 1";
+
+	        $resultado = mysqli_query($conexao,$query) or die ("Não consigo executar a query: ". mysqli_error());
+
+            if($resultado) {
+                while ($row = mysqli_fetch_array($resultado)){
+                echo "<td align=center><img src='/" . $row['foto']. "'><br>".$row['nome']."</td>";
+                $leitores++;
+                if($leitores >=3){
+                    echo "</tr><tr>";
+                    }
+                    
+                }
+            }
+            
+            echo "</tr></table>";
+            
+            	mysqli_close($conexao);
+            
+            ?>
     </div>
 </form>
 

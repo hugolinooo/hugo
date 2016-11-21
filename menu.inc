@@ -5,79 +5,66 @@
     <td width= "33%">
         <img src="/imgs/bannertop.png">
     </td>
-    <td width= "33%">
+    <td width= "33%" align=right>
     
     <?php
+        $adm = false;
+        $envia_contos = "";
+
+    session_start(); 
+		
+		if(isset($_POST['sair'])){
+		    unset($_SESSION['usuario']); 
+			unset($_SESSION['senha']); 
+			unset($_SESSION['nome']);
+			session_destroy(); 
+			header('location:index.php');
+		}
+		
+		if(((isset ($_SESSION['usuario']) == true) and (isset ($_SESSION['senha']) == true))) { 
+				
+			$logado = $_SESSION['nome'];
 			
+			$envia_contos = '<a href="enviar_conto.php"><b>Envie seu conto</b></a>';
+			
+			if($_SESSION['usuario'] == "admin"){
+			    $adm = true;
+			}
+        }
+        
+        
 
 if(isset($_POST['enviar'])){
 
-session_start();
+    $user = $_POST['login'];
 
-$login = strip_tags($_POST['login']);
+    echo '<p align=“right”> Bem vindo ' . $user . '</p>'; 
     
-$senha = sha1(strip_tags($_POST['senha']));
-    
-
-// conctando ao BD
-    
-
-include "conecta.php";
-
-	
-$query="SELECT * from usuario WHERE  login=? AND senha=?";
-
-	
-if($stmt = mysqli_prepare($conexao, $query)) {
-
-		mysqli_stmt_bind_param($stmt, "ss", $login, $senha);
-	
-		mysqli_stmt_execute($stmt);
-
-		mysqli_stmt_bind_result($stmt, $usuarioid, $nome, $login1, $senha1, $foto, $email, $aprovacao);
-
-		mysqli_stmt_fetch($stmt);
-
-	  
-		if ($login == $login1 && $senha == $senha1) {
-
-			$_SESSION['login'] = $login;
-
-			$_SESSION['senha'] = $senha;
-
-			header('location:index.php');
 
 		}
-	  
-		else {
-
-			echo "Usuario ou senha incorretos";
-
-		}
-
-		mysqli_stmt_close($stmt);
-
-	}
- else {
-	
-	echo "Falha no statment";
-
-	}
-
-	mysqli_close($conexao);
-
-
-			
-			
-			
-			}
-			else{
-			  echo '<form action="index.php" method="POST" align="right">
+		else{
+			if((!isset ($_SESSION['usuario']) == true) and (!isset ($_SESSION['senha']) == true)) { 
+			  echo '<form action="login.php" method="POST" align="right">
 				  <p><label for="login">Login:</label><input type="text" name="login" id="login" required /></p>
 				  <p><label for="senha">Senha:</label><input type="password" name="senha" id="senha" maxlength="8" required/></p>
 				  <p><input type="submit" name="enviar" value="ENVIAR"/></p>
-		  </form>';
+		        </form>';
+		    }
+		    else{
+		        echo '<form action="index.php" method="POST" align="right">
+				  <p>Bem vindo '. $logado . '!</p>
+				  <p><input type="submit" name="sair" value="Sair"/></p>
+		        </form>';
+		    
+		    }
 }
+
+    $painel = "";
+
+        if($adm == true){
+            $painel = '<li><a href="painel_controle.php"><b>Painel de Controle</b></a></li>';
+        }
+
 
       ?>
 		</td>
@@ -91,12 +78,13 @@ if($stmt = mysqli_prepare($conexao, $query)) {
   <li class="dropdown">
     <a href="#" class="dropbtn"><b>Ajudando o Site</b></a>
     <div class="dropdown-content">
-      <a href="enviar_conto.php"><b>Envie seu conto</b></a>
+      <?php echo $envia_contos; ?>
       <a href="enviar_foto.php"><b>Envie sua foto</b></a>
       <a href="enviar_sugestao.php"><b>Envie sua sugestão</b></a>
     </div>
   </li>
   <li><a href="quem_somos.php"><b>Quem Somos</b></a></li>
+<?php echo $painel; ?>
 </ul>
 
 <?php

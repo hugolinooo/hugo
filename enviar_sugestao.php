@@ -57,8 +57,7 @@ else{
 <p><label for="nome">Nome: </label><input type="text" name="nome" size="40"></p>
 <p><label for="email">E-mail: </label><input type="email" name="email" size="39"></p>
 <p><label for="descricao">Sugestão: </label></p>
-<textarea name="descricao" rows="8" cols="50" placeholder="Escreva sua sugestão aqui.">
-</textarea>
+<textarea name="descricao" rows="8" cols="50" placeholder="Escreva sua sugestão aqui."></textarea>
 <p><input type="submit" name="enviar" value="Enviar"></p>
 </fieldset>
 </form>';
